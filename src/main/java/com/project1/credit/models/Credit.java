@@ -3,15 +3,24 @@ package com.project1.credit.models;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.lang.Nullable;
 
 @Document(collection = "credit")
 public class Credit {
     @Id
     private String idCredit;
+
     private Double availableAmount;
+
     private Double consumedAmount;
+    
+    @DBRef
     private CreditType creditType;
+
+    @Nullable
+    @DBRef
     private List<CreditTrasaction> creditTrasactions;
 
     public Credit() {
