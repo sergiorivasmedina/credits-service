@@ -2,8 +2,10 @@ package com.project1.credit.repositories;
 
 import com.project1.credit.models.CreditType;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import org.springframework.stereotype.Repository;
 
-public interface CreditTypeRepository extends MongoRepository<CreditType, Integer> {
+@Repository
+public interface CreditTypeRepository extends ReactiveMongoRepository<CreditType, String> {
     
 }
