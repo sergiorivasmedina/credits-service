@@ -12,6 +12,8 @@ public class Credit {
     @Id
     private String idCredit;
 
+    private String idCustomer;
+
     private Double availableAmount;
 
     private Double consumedAmount;
@@ -26,8 +28,9 @@ public class Credit {
     public Credit() {
     }
 
-    public Credit(String idCredit, Double availableAmount, Double consumedAmount, CreditType creditType, List<CreditTrasaction> creditTrasactions) {
+    public Credit(String idCredit, String idCustomer, Double availableAmount, Double consumedAmount, CreditType creditType, List<CreditTrasaction> creditTrasactions) {
         this.idCredit = idCredit;
+        this.idCustomer = idCustomer;
         this.availableAmount = availableAmount;
         this.consumedAmount = consumedAmount;
         this.creditType = creditType;
@@ -40,6 +43,14 @@ public class Credit {
 
     public void setIdCredit(String idCredit) {
         this.idCredit = idCredit;
+    }
+
+    public String getIdCustomer() {
+        return this.idCustomer;
+    }
+
+    public void setIdCustomer(String idCustomer) {
+        this.idCustomer = idCustomer;
     }
 
     public Double getAvailableAmount() {
@@ -78,10 +89,12 @@ public class Credit {
     public String toString() {
         return "{" +
             " idCredit='" + getIdCredit() + "'" +
+            ", idCustomer='" + getIdCustomer() + "'" +
             ", availableAmount='" + getAvailableAmount() + "'" +
             ", consumedAmount='" + getConsumedAmount() + "'" +
             ", creditType='" + getCreditType() + "'" +
             ", creditTrasactions='" + getCreditTrasactions() + "'" +
             "}";
     }
+
 }
