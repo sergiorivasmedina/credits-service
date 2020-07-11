@@ -5,18 +5,18 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "creditTransaction")
-public class CreditTrasaction {
+@Document(collection = "Transaction")
+public class Transaction {
     @Id
     private String idCreditTransaction;
     private Double amount;
     private Date creationDate;
-    private TransactionType transactionType;
+    private String transactionType;
 
-    public CreditTrasaction() {
+    public Transaction() {
     }
 
-    public CreditTrasaction(String idCreditTransaction, Double amount, Date creationDate, TransactionType transactionType) {
+    public Transaction(String idCreditTransaction, Double amount, Date creationDate, String transactionType) {
         this.idCreditTransaction = idCreditTransaction;
         this.amount = amount;
         this.creationDate = creationDate;
@@ -47,11 +47,11 @@ public class CreditTrasaction {
         this.creationDate = creationDate;
     }
 
-    public TransactionType getTransactionType() {
+    public String getTransactionType() {
         return this.transactionType;
     }
 
-    public void setTransactionType(TransactionType transactionType) {
+    public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
     }
 

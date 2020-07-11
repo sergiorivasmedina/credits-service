@@ -2,7 +2,6 @@ package com.project1.credit.controllers;
 
 import com.project1.credit.models.Credit;
 import com.project1.credit.repositories.CreditRepository;
-import com.project1.credit.repositories.CreditTypeRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
