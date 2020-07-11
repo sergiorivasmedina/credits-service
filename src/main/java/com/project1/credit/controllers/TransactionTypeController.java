@@ -43,7 +43,7 @@ public class TransactionTypeController {
     }
 
     @PutMapping(value="transaction/type/{typeId}")
-    public Mono<ResponseEntity<TransactionType>> updateTrasactionType(@PathVariable(typeId) String typeId, @RequestBody TransactionType type) {
+    public Mono<ResponseEntity<TransactionType>> updateTrasactionType(@PathVariable(name = "typeId") String typeId, @RequestBody TransactionType type) {
         // update a transaction type
         return transactionTypeRepository.findById(typeId)
                 .flatMap(existingType -> {
