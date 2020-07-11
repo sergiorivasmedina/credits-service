@@ -1,7 +1,5 @@
 package com.project1.credit.controllers;
 
-import java.util.List;
-
 import com.project1.credit.models.CreditType;
 import com.project1.credit.repositories.CreditTypeRepository;
 
@@ -32,6 +30,11 @@ public class CreditTypeController {
     @GetMapping(value = "/credit/types")
     public @ResponseBody Flux<CreditType> getAllTypes() {
         return creditTypeRepository.findAll();
+    }
+
+    @GetMapping(value = "/credit/types/{id}")
+    public @ResponseBody Mono<CreditType> getOneType(@PathVariable(value = "id") String creditTypeId) {
+        return creditTypeRepository.findById(creditTypeId);
     }
 
     @PostMapping(value = "/credit/type/new")

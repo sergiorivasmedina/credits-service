@@ -3,7 +3,6 @@ package com.project1.credit.models;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.Nullable;
 
@@ -11,24 +10,17 @@ import org.springframework.lang.Nullable;
 public class Credit {
     @Id
     private String idCredit;
-
     private String idCustomer;
-
     private Double availableAmount;
-
     private Double consumedAmount;
-    
-    @DBRef
-    private CreditType creditType;
-
+    private String creditType;
     @Nullable
-    @DBRef
-    private List<CreditTrasaction> creditTrasactions;
+    private List<String> creditTrasactions;
 
     public Credit() {
     }
 
-    public Credit(String idCredit, String idCustomer, Double availableAmount, Double consumedAmount, CreditType creditType, List<CreditTrasaction> creditTrasactions) {
+    public Credit(String idCredit, String idCustomer, Double availableAmount, Double consumedAmount, String creditType, List<String> creditTrasactions) {
         this.idCredit = idCredit;
         this.idCustomer = idCustomer;
         this.availableAmount = availableAmount;
@@ -69,20 +61,66 @@ public class Credit {
         this.consumedAmount = consumedAmount;
     }
 
-    public CreditType getCreditType() {
+    public String getCreditType() {
         return this.creditType;
     }
 
-    public void setCreditType(CreditType creditType) {
+    public void setCreditType(String creditType) {
         this.creditType = creditType;
     }
 
-    public List<CreditTrasaction> getCreditTrasactions() {
+    public List<String> getCreditTrasactions() {
         return this.creditTrasactions;
     }
 
-    public void setCreditTrasactions(List<CreditTrasaction> creditTrasactions) {
+    public void setCreditTrasactions(List<String> creditTrasactions) {
         this.creditTrasactions = creditTrasactions;
+    }
+
+    public Credit idCredit(String idCredit) {
+        this.idCredit = idCredit;
+        return this;
+    }
+
+    public Credit idCustomer(String idCustomer) {
+        this.idCustomer = idCustomer;
+        return this;
+    }
+
+    public Credit availableAmount(Double availableAmount) {
+        this.availableAmount = availableAmount;
+        return this;
+    }
+
+    public Credit consumedAmount(Double consumedAmount) {
+        this.consumedAmount = consumedAmount;
+        return this;
+    }
+
+    public Credit creditType(String creditType) {
+        this.creditType = creditType;
+        return this;
+    }
+
+    public Credit creditTrasactions(List<String> creditTrasactions) {
+        this.creditTrasactions = creditTrasactions;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Credit)) {
+            return false;
+        }
+        Credit credit = (Credit) o;
+        return Objects.equals(idCredit, credit.idCredit) && Objects.equals(idCustomer, credit.idCustomer) && Objects.equals(availableAmount, credit.availableAmount) && Objects.equals(consumedAmount, credit.consumedAmount) && Objects.equals(creditType, credit.creditType) && Objects.equals(creditTrasactions, credit.creditTrasactions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idCredit, idCustomer, availableAmount, consumedAmount, creditType, creditTrasactions);
     }
 
     @Override
@@ -96,5 +134,4 @@ public class Credit {
             ", creditTrasactions='" + getCreditTrasactions() + "'" +
             "}";
     }
-
 }
