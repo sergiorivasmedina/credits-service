@@ -77,52 +77,6 @@ public class Credit {
         this.creditTrasactions = creditTrasactions;
     }
 
-    public Credit idCredit(String idCredit) {
-        this.idCredit = idCredit;
-        return this;
-    }
-
-    public Credit idCustomer(String idCustomer) {
-        this.idCustomer = idCustomer;
-        return this;
-    }
-
-    public Credit availableAmount(Double availableAmount) {
-        this.availableAmount = availableAmount;
-        return this;
-    }
-
-    public Credit consumedAmount(Double consumedAmount) {
-        this.consumedAmount = consumedAmount;
-        return this;
-    }
-
-    public Credit creditType(String creditType) {
-        this.creditType = creditType;
-        return this;
-    }
-
-    public Credit creditTrasactions(List<String> creditTrasactions) {
-        this.creditTrasactions = creditTrasactions;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Credit)) {
-            return false;
-        }
-        Credit credit = (Credit) o;
-        return Objects.equals(idCredit, credit.idCredit) && Objects.equals(idCustomer, credit.idCustomer) && Objects.equals(availableAmount, credit.availableAmount) && Objects.equals(consumedAmount, credit.consumedAmount) && Objects.equals(creditType, credit.creditType) && Objects.equals(creditTrasactions, credit.creditTrasactions);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idCredit, idCustomer, availableAmount, consumedAmount, creditType, creditTrasactions);
-    }
-
     @Override
     public String toString() {
         return "{" +
