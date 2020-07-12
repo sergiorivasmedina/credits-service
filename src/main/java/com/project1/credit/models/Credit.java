@@ -16,14 +16,14 @@ public class Credit {
     private Double consumedAmount;
     private String creditType;
     @Nullable
-    private String limit;
+    private Double limit;
     @Nullable
     private List<String> creditTransactions;
 
     public Credit() {
     }
 
-    public Credit(String idCredit, String idCustomer, String idCurrency, Double availableAmount, Double consumedAmount, String creditType, String limit, List<String> creditTransactions) {
+    public Credit(String idCredit, String idCustomer, String idCurrency, Double availableAmount, Double consumedAmount, String creditType, Double limit, List<String> creditTransactions) {
         this.idCredit = idCredit;
         this.idCustomer = idCustomer;
         this.idCurrency = idCurrency;
@@ -82,11 +82,11 @@ public class Credit {
         this.creditType = creditType;
     }
 
-    public String getLimit() {
+    public Double getLimit() {
         return this.limit;
     }
 
-    public void setLimit(String limit) {
+    public void setLimit(Double limit) {
         this.limit = limit;
     }
 

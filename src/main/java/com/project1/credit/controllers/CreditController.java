@@ -58,4 +58,37 @@ public class CreditController {
             )
             .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    //Pay credit products
+    @PutMapping(value = "/credit/pay/{creditId}/{amount}")
+    public Mono<ResponseEntity<Credit>> payProduct(@PathVariable(name = "creditId") String creditId, @PathVariable(name = "amount") Double amount) {
+        return creditRepository.findById(creditId)
+            .flatMap(existingCredit -> {
+                //update available amount and consumed amount
+                existingCredit.setAvailableAmount(existingCredit.getAvailableAmount() + amount);
+                existingCredit.setConsumedAmount(existingCredit.getConsumedAmount() - amount);
+                return creditRepository.save(existingCredit);
+            })
+            .map(updateCredit -> new ResponseEntity<>(updateCredit, HttpStatus.OK))
+            .defaultIfEmpty((new ResponseEntity<>(HttpStatus.NOT_FOUND)));
+    }
+
+    //Charge credit consumption
+    @PutMapping(value = "/credit/charge/{creditId}/{amount}")
+    public Mono<ResponseEntity<Credit>> chargeProduct(@PathVariable(name = "creditId") String creditId, @PathVariable(name = "amount") Double amount) {
+        return creditRepository.findById(creditId)
+            .flatMap(existingCredit -> {
+                Double available = existingCredit.getAvailableAmount();
+                Double consumed = existingCredit.getConsumedAmount();
+
+                if ((consumed + amount) < existingCredit.getLimit()) {
+                    //update available amount and consumed amount
+                    existingCredit.setAvailableAmount(available - amount);
+                    existingCredit.setConsumedAmount(consumed + amount);
+                }
+                return creditRepository.save(existingCredit); //debería mandar un mensaje de que el monto no se pudo actualizar
+            })
+            .map(updateCredit -> new ResponseEntity<>(updateCredit, HttpStatus.OK))
+            .defaultIfEmpty((new ResponseEntity<>(HttpStatus.NOT_FOUND)));
+    }
 }
