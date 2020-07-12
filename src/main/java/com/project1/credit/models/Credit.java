@@ -11,22 +11,24 @@ public class Credit {
     @Id
     private String idCredit;
     private String idCustomer;
+    private String idCurrency;
     private Double availableAmount;
     private Double consumedAmount;
     private String creditType;
     @Nullable
-    private List<String> creditTrasactions;
+    private List<String> creditTransactions;
 
     public Credit() {
     }
 
-    public Credit(String idCredit, String idCustomer, Double availableAmount, Double consumedAmount, String creditType, List<String> creditTrasactions) {
+    public Credit(String idCredit, String idCustomer, String idCurrency, Double availableAmount, Double consumedAmount, String creditType, List<String> creditTransactions) {
         this.idCredit = idCredit;
         this.idCustomer = idCustomer;
+        this.idCurrency = idCurrency;
         this.availableAmount = availableAmount;
         this.consumedAmount = consumedAmount;
         this.creditType = creditType;
-        this.creditTrasactions = creditTrasactions;
+        this.creditTransactions = creditTransactions;
     }
 
     public String getIdCredit() {
@@ -43,6 +45,14 @@ public class Credit {
 
     public void setIdCustomer(String idCustomer) {
         this.idCustomer = idCustomer;
+    }
+
+    public String getIdCurrency() {
+        return this.idCurrency;
+    }
+
+    public void setIdCurrency(String idCurrency) {
+        this.idCurrency = idCurrency;
     }
 
     public Double getAvailableAmount() {
@@ -69,12 +79,12 @@ public class Credit {
         this.creditType = creditType;
     }
 
-    public List<String> getCreditTrasactions() {
-        return this.creditTrasactions;
+    public List<String> getCreditTransactions() {
+        return this.creditTransactions;
     }
 
-    public void setCreditTrasactions(List<String> creditTrasactions) {
-        this.creditTrasactions = creditTrasactions;
+    public void setCreditTransactions(List<String> creditTransactions) {
+        this.creditTransactions = creditTransactions;
     }
 
     @Override
@@ -82,10 +92,11 @@ public class Credit {
         return "{" +
             " idCredit='" + getIdCredit() + "'" +
             ", idCustomer='" + getIdCustomer() + "'" +
+            ", idCurrency='" + getIdCurrency() + "'" +
             ", availableAmount='" + getAvailableAmount() + "'" +
             ", consumedAmount='" + getConsumedAmount() + "'" +
             ", creditType='" + getCreditType() + "'" +
-            ", creditTrasactions='" + getCreditTrasactions() + "'" +
+            ", creditTransactions='" + getCreditTransactions() + "'" +
             "}";
     }
 }
