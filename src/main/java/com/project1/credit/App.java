@@ -23,7 +23,7 @@ public class App {
 	}
 
 	@GetMapping(value = "/")
-	String alive() {
+	public String alive() {
 		return "Credits is alive !";
 	}
 
