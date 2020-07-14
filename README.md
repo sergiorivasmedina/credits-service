@@ -3,9 +3,9 @@
 ### Command for run Dockerfile and start container
 cd /project1-customers
 
-docker build -t "customers"
+docker build -t "credtis"
 
-docker run --restart always --name custumers -8080:9000 -d costumers:latest
+docker run --restart always --name credtis -8080:9000 -d credtis:latest
 
 ### Sonarqube
 
