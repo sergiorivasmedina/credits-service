@@ -1,7 +1,7 @@
-# project1-credit
+# project2-credit
 
 ### Command for run Dockerfile and start container
-cd /project1-customers
+cd /credits
 
 docker build -t "credtis"
 
