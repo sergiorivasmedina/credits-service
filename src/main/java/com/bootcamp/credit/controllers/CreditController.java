@@ -1,7 +1,7 @@
 package com.bootcamp.credit.controllers;
 
 import com.bootcamp.credit.models.Credit;
-import com.bootcamp.credit.repositories.CreditRepository;
+import com.bootcamp.credit.services.CreditService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,25 +25,25 @@ import reactor.core.publisher.Mono;
 public class CreditController {
     
     @Autowired
-    private CreditRepository creditRepository;
+    private CreditService creditService;
     
     @GetMapping(value = "/credits")
     public @ResponseBody Flux<Credit> getAllCredits() {
         // list all data in credit collection
-        return creditRepository.findAll();
+        return creditService.findAll();
     }
 
     @PostMapping(value = "/credit/new")
     public Mono<Credit> newCredit(@RequestBody Credit newCredit) {
         // adding a new credit to the collection
-        return creditRepository.save(newCredit);
+        return creditService.save(newCredit);
     }
 
     @PutMapping(value = "/credit/{creditId}")
     public Mono <ResponseEntity<Credit>> updateCredit(@PathVariable(name = "creditId") String creditId, @RequestBody Credit credit) {
-        return creditRepository.findById(creditId)
+        return creditService.findById(creditId)
             .flatMap(existingCredit -> {
-                return creditRepository.save(credit);
+                return creditService.save(credit);
             })
             .map(updateCredit -> new ResponseEntity<>(updateCredit, HttpStatus.OK))
             .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -51,9 +51,9 @@ public class CreditController {
 
     @DeleteMapping(value = "/credit/{creditId}")
     public Mono<ResponseEntity<Void>> deleteCreditType(@PathVariable(name = "creditId") String creditId) {
-        return creditRepository.findById(creditId)
+        return creditService.findById(creditId)
             .flatMap(existingCredit ->
-                creditRepository.delete(existingCredit)
+                creditService.delete(existingCredit)
                     .then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK))) 
             )
             .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -62,12 +62,12 @@ public class CreditController {
     //Pay credit products
     @PutMapping(value = "/credit/pay/{creditId}/{amount}")
     public Mono<ResponseEntity<Credit>> payProduct(@PathVariable(name = "creditId") String creditId, @PathVariable(name = "amount") Double amount) {
-        return creditRepository.findById(creditId)
+        return creditService.findById(creditId)
             .flatMap(existingCredit -> {
                 //update available amount and consumed amount
                 existingCredit.setAvailableAmount(existingCredit.getAvailableAmount() + amount);
                 existingCredit.setConsumedAmount(existingCredit.getConsumedAmount() - amount);
-                return creditRepository.save(existingCredit);
+                return creditService.save(existingCredit);
             })
             .map(updateCredit -> new ResponseEntity<>(updateCredit, HttpStatus.OK))
             .defaultIfEmpty((new ResponseEntity<>(HttpStatus.NOT_FOUND)));
@@ -76,7 +76,7 @@ public class CreditController {
     //Charge credit consumption
     @PutMapping(value = "/credit/charge/{creditId}/{amount}")
     public Mono<ResponseEntity<Credit>> chargeProduct(@PathVariable(name = "creditId") String creditId, @PathVariable(name = "amount") Double amount) {
-        return creditRepository.findById(creditId)
+        return creditService.findById(creditId)
             .flatMap(existingCredit -> {
                 Double available = existingCredit.getAvailableAmount();
                 Double consumed = existingCredit.getConsumedAmount();
@@ -86,7 +86,7 @@ public class CreditController {
                     existingCredit.setAvailableAmount(available - amount);
                     existingCredit.setConsumedAmount(consumed + amount);
                 }
-                return creditRepository.save(existingCredit); //debería mandar un mensaje de que el monto no se pudo actualizar
+                return creditService.save(existingCredit); //debería mandar un mensaje de que el monto no se pudo actualizar
             })
             .map(updateCredit -> new ResponseEntity<>(updateCredit, HttpStatus.OK))
             .defaultIfEmpty((new ResponseEntity<>(HttpStatus.NOT_FOUND)));
