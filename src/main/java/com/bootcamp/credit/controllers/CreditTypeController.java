@@ -1,7 +1,7 @@
 package com.bootcamp.credit.controllers;
 
 import com.bootcamp.credit.models.CreditType;
-import com.bootcamp.credit.repositories.CreditTypeRepository;
+import com.bootcamp.credit.services.CreditTypeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,29 +25,29 @@ import reactor.core.publisher.Mono;
 public class CreditTypeController {
 
     @Autowired
-    private CreditTypeRepository creditTypeRepository;
+    private CreditTypeService creditTypeService;
 
     @GetMapping(value = "/credit/types")
     public @ResponseBody Flux<CreditType> getAllTypes() {
-        return creditTypeRepository.findAll();
+        return creditTypeService.findAll();
     }
 
     @GetMapping(value = "/credit/types/{id}")
     public @ResponseBody Mono<CreditType> getOneType(@PathVariable(value = "id") String creditTypeId) {
-        return creditTypeRepository.findById(creditTypeId);
+        return creditTypeService.findById(creditTypeId);
     }
 
     @PostMapping(value = "/credit/type/new")
     public Mono<CreditType> newCreditType(@RequestBody CreditType creditType) {
-        return creditTypeRepository.save(creditType);
+        return creditTypeService.save(creditType);
     }
 
     @PutMapping(value = "/credit/type/{id}")
     public Mono<ResponseEntity<CreditType>> updateCreditType(@PathVariable(value = "id") String creditTypeId, @RequestBody CreditType creditType) {
-        return creditTypeRepository.findById(creditTypeId)
+        return creditTypeService.findById(creditTypeId)
                 .flatMap(existingCreditType -> {
                     existingCreditType.setName(creditType.getName());
-                    return creditTypeRepository.save(existingCreditType);
+                    return creditTypeService.save(existingCreditType);
                 })
                 .map(updateCreditType -> new ResponseEntity<>(updateCreditType, HttpStatus.OK))
                 .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -55,9 +55,9 @@ public class CreditTypeController {
 
     @DeleteMapping(value = "/credit/type/{id}")
     public Mono<ResponseEntity<Void>> deleteCreditType(@PathVariable(value = "id") String creditTypeId) {
-        return creditTypeRepository.findById(creditTypeId)
+        return creditTypeService.findById(creditTypeId)
                 .flatMap(existingCreditType -> 
-                        creditTypeRepository.delete(existingCreditType)
+                        creditTypeService.delete(existingCreditType)
                             .then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)))
                         )
                         .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));

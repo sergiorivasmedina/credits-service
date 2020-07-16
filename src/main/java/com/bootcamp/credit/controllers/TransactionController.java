@@ -1,7 +1,7 @@
 package com.bootcamp.credit.controllers;
 
 import com.bootcamp.credit.models.Transaction;
-import com.bootcamp.credit.repositories.TransactionRepository;
+import com.bootcamp.credit.services.TransactionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,26 +25,26 @@ import reactor.core.publisher.Mono;
 public class TransactionController {
     
     @Autowired
-    private TransactionRepository transactionRepository;
+    private TransactionService transactionService;
 
     @GetMapping(value = "/transactions")
     public @ResponseBody Flux<Transaction> getAllTrasactions() {
         // list all data in transaction collection
-        return transactionRepository.findAll();
+        return transactionService.findAll();
     }
 
     @PostMapping(value="/transaction/new")
     public Mono<Transaction> newTransaction(@RequestBody Transaction transaction) {
         // aading a new transaction
-        return transactionRepository.save(transaction);
+        return transactionService.save(transaction);
     }
 
     @PutMapping(value="transaction/{transactionId}")
     public Mono<ResponseEntity<Transaction>> updateTrasaction(@PathVariable(name = "transactionId") String transactionId, @RequestBody Transaction transaction) {
         // update a transaction type
-        return transactionRepository.findById(transactionId)
+        return transactionService.findById(transactionId)
                 .flatMap(existingTransaction -> {
-                    return transactionRepository.save(transaction);
+                    return transactionService.save(transaction);
                 })
                 .map(updateTransaction -> new ResponseEntity<>(updateTransaction, HttpStatus.OK))
                 .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -52,9 +52,9 @@ public class TransactionController {
 
     @DeleteMapping(value = "/transaction/{transactionId}")
     public Mono<ResponseEntity<Void>> deleteTransactionType(@PathVariable(name = "transactionId") String transactionId) {
-        return transactionRepository.findById(transactionId)
+        return transactionService.findById(transactionId)
                 .flatMap(existingTransaction ->
-                    transactionRepository.delete(existingTransaction)
+                    transactionService.delete(existingTransaction)
                         .then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)))
                 )
                 .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
