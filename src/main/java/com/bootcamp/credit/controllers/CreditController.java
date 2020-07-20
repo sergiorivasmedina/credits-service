@@ -1,5 +1,7 @@
 package com.bootcamp.credit.controllers;
 
+import java.util.List;
+
 import com.bootcamp.credit.models.Credit;
 import com.bootcamp.credit.services.CreditService;
 
@@ -60,13 +62,21 @@ public class CreditController {
     }
 
     //Pay credit products
-    @PutMapping(value = "/credit/pay/{creditId}/{amount}")
-    public Mono<ResponseEntity<Credit>> payProduct(@PathVariable(name = "creditId") String creditId, @PathVariable(name = "amount") Double amount) {
+    @PutMapping(value = "/credit/pay/{creditId}/{amount}/{transactionId}")
+    public Mono<ResponseEntity<Credit>> payProduct(@PathVariable(name = "creditId") String creditId, @PathVariable(name = "amount") Double amount,
+            @PathVariable(name = "transactionId") String transactionId) {
+
         return creditService.findById(creditId)
             .flatMap(existingCredit -> {
                 //update available amount and consumed amount
                 existingCredit.setAvailableAmount(existingCredit.getAvailableAmount() + amount);
                 existingCredit.setConsumedAmount(existingCredit.getConsumedAmount() - amount);
+
+                //add new transaction to the list
+                List<String> transactionList = existingCredit.getCreditTransactions();
+                transactionList.add(transactionId);
+                existingCredit.setCreditTransactions(transactionList);
+
                 return creditService.save(existingCredit);
             })
             .map(updateCredit -> new ResponseEntity<>(updateCredit, HttpStatus.OK))
@@ -74,8 +84,10 @@ public class CreditController {
     }
 
     //Charge credit consumption
-    @PutMapping(value = "/credit/charge/{creditId}/{amount}")
-    public Mono<ResponseEntity<Credit>> chargeProduct(@PathVariable(name = "creditId") String creditId, @PathVariable(name = "amount") Double amount) {
+    @PutMapping(value = "/credit/charge/{creditId}/{amount}/{transactionId}")
+    public Mono<ResponseEntity<Credit>> chargeProduct(@PathVariable(name = "creditId") String creditId, @PathVariable(name = "amount") Double amount,
+            @PathVariable(name = "transactionId") String transactionId ) {
+
         return creditService.findById(creditId)
             .flatMap(existingCredit -> {
                 Double available = existingCredit.getAvailableAmount();
@@ -85,6 +97,11 @@ public class CreditController {
                     //update available amount and consumed amount
                     existingCredit.setAvailableAmount(available - amount);
                     existingCredit.setConsumedAmount(consumed + amount);
+
+                    //add new transaction to the list
+                    List<String> transactionList = existingCredit.getCreditTransactions();
+                    transactionList.add(transactionId);
+                    existingCredit.setCreditTransactions(transactionList);
                 }
                 return creditService.save(existingCredit); //debería mandar un mensaje de que el monto no se pudo actualizar
             })
