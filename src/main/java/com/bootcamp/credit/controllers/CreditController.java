@@ -108,4 +108,9 @@ public class CreditController {
             .map(updateCredit -> new ResponseEntity<>(updateCredit, HttpStatus.OK))
             .defaultIfEmpty((new ResponseEntity<>(HttpStatus.NOT_FOUND)));
     }
+
+    @GetMapping(value = "/credit/search/{customerId}")
+    public Flux<Credit> searchCreditByCustomerId(@PathVariable(name = "customerId") String customerId) {
+        return creditService.searchCreditByCustomerId(customerId);
+    }
 }
