@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bootcamp.credit.models.Credit;
-import com.bootcamp.credit.repositories.CreditRepository;
+import com.bootcamp.credit.services.CreditService;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +26,7 @@ import reactor.core.publisher.Mono;
 @WebFluxTest(controllers = CreditController.class)
 public class creditControllerTest {
     @MockBean
-    CreditRepository repository;
+    CreditService service;
 
     @Autowired
     private WebTestClient webclient;
@@ -41,7 +41,7 @@ public class creditControllerTest {
         Flux<Credit> transactionTypeFlux = Flux.fromIterable(list);
 
         Mockito
-            .when(repository.findAll())
+            .when(service.findAll())
             .thenReturn(transactionTypeFlux);
 
         webclient.get()
@@ -51,7 +51,7 @@ public class creditControllerTest {
             .expectStatus().isOk()
             .expectBodyList(Credit.class);
 
-            Mockito.verify(repository, times(1)).findAll();
+            Mockito.verify(service, times(1)).findAll();
     }
 
     @Test
@@ -59,7 +59,7 @@ public class creditControllerTest {
         Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, null);
 
         Mockito
-            .when(repository.save(credit))
+            .when(service.save(credit))
             .thenReturn(Mono.just(credit));
         
         webclient.post()
@@ -76,12 +76,12 @@ public class creditControllerTest {
         Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, null);
 
         Mockito
-            .when(repository.findById("1"))
+            .when(service.findById("1"))
             .thenReturn(Mono.just(credit));
 
         Mono<Void> voidReturn  = Mono.empty();
         Mockito
-            .when(repository.delete(credit))
+            .when(service.delete(credit))
             .thenReturn(voidReturn);
 
 	    webclient.delete()

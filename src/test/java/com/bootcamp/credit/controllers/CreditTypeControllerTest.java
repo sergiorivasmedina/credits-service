@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bootcamp.credit.models.CreditType;
-import com.bootcamp.credit.repositories.CreditTypeRepository;
+import com.bootcamp.credit.services.CreditTypeService;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +26,7 @@ import reactor.core.publisher.Mono;
 @WebFluxTest(controllers = CreditTypeController.class)
 public class CreditTypeControllerTest {
     @MockBean
-    CreditTypeRepository repository;
+    CreditTypeService service;
 
     @Autowired
     private WebTestClient webclient;
@@ -41,7 +41,7 @@ public class CreditTypeControllerTest {
         Flux<CreditType> transactionTypeFlux = Flux.fromIterable(list);
 
         Mockito
-            .when(repository.findAll())
+            .when(service.findAll())
             .thenReturn(transactionTypeFlux);
 
         webclient.get()
@@ -51,7 +51,7 @@ public class CreditTypeControllerTest {
             .expectStatus().isOk()
             .expectBodyList(CreditType.class);
 
-            Mockito.verify(repository, times(1)).findAll();
+            Mockito.verify(service, times(1)).findAll();
     }
 
     @Test
@@ -59,7 +59,7 @@ public class CreditTypeControllerTest {
         CreditType creditType = new CreditType("1","tarjeta de credito");
 
         Mockito
-            .when(repository.save(creditType))
+            .when(service.save(creditType))
             .thenReturn(Mono.just(creditType));
         
         webclient.post()
@@ -76,12 +76,12 @@ public class CreditTypeControllerTest {
         CreditType creditType = new CreditType("1","tarjeta de credito");
 
         Mockito
-            .when(repository.findById("1"))
+            .when(service.findById("1"))
             .thenReturn(Mono.just(creditType));
 
         Mono<Void> voidReturn  = Mono.empty();
         Mockito
-            .when(repository.delete(creditType))
+            .when(service.delete(creditType))
             .thenReturn(voidReturn);
 
 	    webclient.delete()

@@ -62,4 +62,11 @@ public class CreditTypeController {
                         )
                         .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @GetMapping(value = "/credit/type/{creditId}")
+    public Mono<String> getTypeName(@PathVariable(name = "creditId") String creditTypeId) {
+        return creditTypeService.findById(creditTypeId)
+                .map(CreditType::getName)
+                .defaultIfEmpty("No se encontró el tipo de crédito");
+    }
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bootcamp.credit.models.Currency;
-import com.bootcamp.credit.repositories.CurrencyRepository;
+import com.bootcamp.credit.services.CurrencyService;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ import reactor.core.publisher.Mono;
 @WebFluxTest(controllers = CurrencyController.class)
 public class CurrencyControllerTest {
     @MockBean
-    CurrencyRepository repository;
+    CurrencyService service;
 
     @Autowired
     private WebTestClient webclient;
@@ -42,7 +42,7 @@ public class CurrencyControllerTest {
         Flux<Currency> transactionTypeFlux = Flux.fromIterable(list);
 
         Mockito
-            .when(repository.findAll())
+            .when(service.findAll())
             .thenReturn(transactionTypeFlux);
 
         webclient.get()
@@ -52,7 +52,7 @@ public class CurrencyControllerTest {
             .expectStatus().isOk()
             .expectBodyList(Currency.class);
 
-            Mockito.verify(repository, times(1)).findAll();
+            Mockito.verify(service, times(1)).findAll();
     }
 
     @Test
@@ -60,7 +60,7 @@ public class CurrencyControllerTest {
         Currency currency = new Currency("1","soles","S/");
 
         Mockito
-            .when(repository.save(currency))
+            .when(service.save(currency))
             .thenReturn(Mono.just(currency));
         
         webclient.post()
@@ -71,7 +71,7 @@ public class CurrencyControllerTest {
             .expectStatus().isOk()
             .expectBody(Currency.class);
 
-        Mockito.verify(repository, times(1)).save(refEq(currency));
+        Mockito.verify(service, times(1)).save(refEq(currency));
     }
 
     @Test
@@ -79,12 +79,12 @@ public class CurrencyControllerTest {
         Currency currency = new Currency("1","soles","S/");
 
         Mockito
-            .when(repository.findById("1"))
+            .when(service.findById("1"))
             .thenReturn(Mono.just(currency));
 
         Mono<Void> voidReturn  = Mono.empty();
         Mockito
-            .when(repository.delete(currency))
+            .when(service.delete(currency))
             .thenReturn(voidReturn);
 
 	    webclient.delete()

@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.bootcamp.credit.models.Transaction;
-import com.bootcamp.credit.repositories.TransactionRepository;
+import com.bootcamp.credit.services.TransactionService;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ import reactor.core.publisher.Mono;
 @WebFluxTest(controllers = TransactionController.class)
 public class TransactionControllerTest {
     @MockBean
-    TransactionRepository repository;
+    TransactionService service;
 
     @Autowired
     private WebTestClient webclient;
@@ -48,12 +48,12 @@ public class TransactionControllerTest {
 
         Flux<Transaction> transactionFlux = Flux.fromIterable(list);
 
-        Mockito.when(repository.findAll()).thenReturn(transactionFlux);
+        Mockito.when(service.findAll()).thenReturn(transactionFlux);
 
         webclient.get().uri("/transactions").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk()
                 .expectBodyList(Transaction.class);
 
-        Mockito.verify(repository, times(1)).findAll();
+        Mockito.verify(service, times(1)).findAll();
     }
 
     @Test
@@ -66,7 +66,7 @@ public class TransactionControllerTest {
 
         Transaction transaction = new Transaction("1", 100.0, dateRepresentation, "type");
 
-        Mockito.when(repository.save(transaction)).thenReturn(Mono.just(transaction));
+        Mockito.when(service.save(transaction)).thenReturn(Mono.just(transaction));
 
         webclient.post().uri("/transaction/new").contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(transaction)).exchange().expectStatus().isOk()
@@ -83,10 +83,10 @@ public class TransactionControllerTest {
 
         Transaction transaction = new Transaction("1", 100.0, dateRepresentation, "type");
 
-        Mockito.when(repository.findById("1")).thenReturn(Mono.just(transaction));
+        Mockito.when(service.findById("1")).thenReturn(Mono.just(transaction));
 
         Mono<Void> voidReturn = Mono.empty();
-        Mockito.when(repository.delete(transaction)).thenReturn(voidReturn);
+        Mockito.when(service.delete(transaction)).thenReturn(voidReturn);
 
         webclient.delete().uri("/transaction/{currencyId}", transaction.getIdCreditTransaction())
                 .exchange()

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bootcamp.credit.models.TransactionType;
-import com.bootcamp.credit.repositories.TransactionTypeRepository;
+import com.bootcamp.credit.services.TransactionTypeService;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ import reactor.core.publisher.Mono;
 @WebFluxTest(controllers = TransactionTypeController.class)
 public class TransactionTypeControllerTest {
     @MockBean
-    TransactionTypeRepository repository;
+    TransactionTypeService service;
 
     @Autowired
     private WebTestClient webclient;
@@ -42,7 +42,7 @@ public class TransactionTypeControllerTest {
         Flux<TransactionType> transactionTypeFlux = Flux.fromIterable(list);
 
         Mockito
-            .when(repository.findAll())
+            .when(service.findAll())
             .thenReturn(transactionTypeFlux);
 
         webclient.get()
@@ -52,7 +52,7 @@ public class TransactionTypeControllerTest {
             .expectStatus().isOk()
             .expectBodyList(TransactionType.class);
 
-            Mockito.verify(repository, times(1)).findAll();
+            Mockito.verify(service, times(1)).findAll();
     }
 
     @Test
@@ -60,7 +60,7 @@ public class TransactionTypeControllerTest {
         TransactionType transactionType = new TransactionType("1", "deposito");
 
         Mockito
-            .when(repository.save(transactionType))
+            .when(service.save(transactionType))
             .thenReturn(Mono.just(transactionType));
         
         webclient.post()
@@ -71,7 +71,7 @@ public class TransactionTypeControllerTest {
             .expectStatus().isOk()
             .expectBody(TransactionType.class);
 
-        Mockito.verify(repository, times(1)).save(refEq(transactionType));
+        Mockito.verify(service, times(1)).save(refEq(transactionType));
     }
 
     @Test
@@ -79,12 +79,12 @@ public class TransactionTypeControllerTest {
         TransactionType transactionType = new TransactionType("1", "deposito");
 
         Mockito
-            .when(repository.findById("1"))
+            .when(service.findById("1"))
             .thenReturn(Mono.just(transactionType));
 
         Mono<Void> voidReturn  = Mono.empty();
         Mockito
-            .when(repository.delete(transactionType))
+            .when(service.delete(transactionType))
             .thenReturn(voidReturn);
 
 	    webclient.delete()
