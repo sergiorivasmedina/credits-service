@@ -33,7 +33,7 @@ public class creditControllerTest {
     
     @Test
     public void getAllCurrencies() {
-        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, null);
+        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, null,"BCP");
 
         List<Credit> list = new ArrayList<Credit>();
         list.add(credit);
@@ -56,7 +56,7 @@ public class creditControllerTest {
 
     @Test
     public void newCurrency() {
-        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, null);
+        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, null,"BCP");
 
         Mockito
             .when(service.save(credit))
@@ -73,7 +73,7 @@ public class creditControllerTest {
 
     @Test
     public void deleteAccountType() {
-        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, null);
+        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, null,"BCP");
 
         Mockito
             .when(service.findById("1"))
