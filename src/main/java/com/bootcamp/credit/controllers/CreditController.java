@@ -37,8 +37,13 @@ public class CreditController {
 
     @PostMapping(value = "/credit/new")
     public Mono<Credit> newCredit(@RequestBody Credit newCredit) {
-        // adding a new credit to the collection
-        return creditService.save(newCredit);
+        //validate idf there is a expired debt
+        return creditService.findByExpiredDebt(newCredit.getIdCustomer(), 1)
+                .map(credit -> {
+                    //there is at least one which equals the condition
+                    return new Credit("No se pudo crear porque tiene una deduda expirada.");
+                })
+                .switchIfEmpty(creditService.save(newCredit));
     }
 
     @PutMapping(value = "/credit/{creditId}")
@@ -112,5 +117,11 @@ public class CreditController {
     @GetMapping(value = "/credit/search/{customerId}")
     public Flux<Credit> searchCreditByCustomerId(@PathVariable(name = "customerId") String customerId) {
         return creditService.searchCreditByCustomerId(customerId);
+    }
+
+    @GetMapping(value = "/credit/search/expired-debt/status/{customerId}/{statusId}")
+    public Mono<Credit> getExpiredDebtStatus(@PathVariable(name = "customerId") String customerId,
+            @PathVariable(name = "statusId") Integer statusId) {
+        return creditService.findByExpiredDebt(customerId, statusId);
     }
 }

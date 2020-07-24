@@ -24,7 +24,12 @@ public class Credit {
     private String creditType;
     @Nullable
     private Double limit;
+    private int expiredDebt;
     @Nullable
     private List<String> creditTransactions;
     private String bankId;
+
+    public Credit(String idCredit) {
+        this.idCredit = idCredit;
+    }
 }

@@ -4,6 +4,7 @@ import com.bootcamp.credit.models.Credit;
 import com.bootcamp.credit.repositories.CreditRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
@@ -18,7 +19,7 @@ public class CreditService {
         return creditRepository.findAll();
     }
 
-    public Mono<Credit> save(Credit newCredit) {
+    public Mono<? extends Credit> save(Credit newCredit) {
         return creditRepository.save(newCredit);
     }
 
@@ -32,5 +33,9 @@ public class CreditService {
 
     public Flux<Credit> searchCreditByCustomerId(String customerId) {
         return creditRepository.findByIdCustomer(customerId);
+    }
+
+    public Mono<Credit> findByExpiredDebt(String customerId, int statusDebt) {
+        return creditRepository.findByIdCustomerAndExpiredDebt(customerId, statusDebt);
     }
 }
