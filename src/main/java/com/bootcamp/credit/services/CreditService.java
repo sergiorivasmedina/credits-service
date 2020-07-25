@@ -4,7 +4,6 @@ import com.bootcamp.credit.models.Credit;
 import com.bootcamp.credit.repositories.CreditRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
