@@ -32,8 +32,8 @@ public class creditControllerTest {
     private WebTestClient webclient;
     
     @Test
-    public void getAllCurrencies() {
-        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, null,"BCP");
+    public void getAllCredits() {
+        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, 0, null,"BCP",null);
 
         List<Credit> list = new ArrayList<Credit>();
         list.add(credit);
@@ -55,8 +55,8 @@ public class creditControllerTest {
     }
 
     @Test
-    public void newCurrency() {
-        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, null,"BCP");
+    public void newCredit() {
+        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, 0, null,"BCP",null);
 
         Mockito
             .when(service.save(credit))
@@ -72,8 +72,8 @@ public class creditControllerTest {
     }
 
     @Test
-    public void deleteAccountType() {
-        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, null,"BCP");
+    public void deleteCredit() {
+        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, 0, null,"BCP",null);
 
         Mockito
             .when(service.findById("1"))

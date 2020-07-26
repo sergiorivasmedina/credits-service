@@ -1,6 +1,9 @@
 package com.bootcamp.credit.models;
 
+import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -28,6 +31,8 @@ public class Credit {
     @Nullable
     private List<String> creditTransactions;
     private String bankId;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+    private Date createdAt;
 
     public Credit(String idCredit) {
         this.idCredit = idCredit;

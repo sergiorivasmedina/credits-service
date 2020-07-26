@@ -2,6 +2,8 @@ package com.bootcamp.credit.controllers;
 
 import java.util.List;
 
+import com.bootcamp.credit.dto.CreditDTO;
+import com.bootcamp.credit.dto.initialEndDates;
 import com.bootcamp.credit.models.Credit;
 import com.bootcamp.credit.services.CreditService;
 
@@ -52,8 +54,8 @@ public class CreditController {
             .flatMap(existingCredit -> {
                 return creditService.save(credit);
             })
-            .map(updateCredit -> new ResponseEntity<>(updateCredit, HttpStatus.OK))
-            .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+            .map(updateCredit -> new ResponseEntity<Credit>(updateCredit, HttpStatus.OK))
+            .defaultIfEmpty(new ResponseEntity<Credit>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping(value = "/credit/{creditId}")
@@ -84,8 +86,8 @@ public class CreditController {
 
                 return creditService.save(existingCredit);
             })
-            .map(updateCredit -> new ResponseEntity<>(updateCredit, HttpStatus.OK))
-            .defaultIfEmpty((new ResponseEntity<>(HttpStatus.NOT_FOUND)));
+            .map(updateCredit -> new ResponseEntity<Credit>(updateCredit, HttpStatus.OK))
+            .defaultIfEmpty((new ResponseEntity<Credit>(HttpStatus.NOT_FOUND)));
     }
 
     //Charge credit consumption
@@ -110,8 +112,8 @@ public class CreditController {
                 }
                 return creditService.save(existingCredit); //debería mandar un mensaje de que el monto no se pudo actualizar
             })
-            .map(updateCredit -> new ResponseEntity<>(updateCredit, HttpStatus.OK))
-            .defaultIfEmpty((new ResponseEntity<>(HttpStatus.NOT_FOUND)));
+            .map(updateCredit -> new ResponseEntity<Credit>(updateCredit, HttpStatus.OK))
+            .defaultIfEmpty((new ResponseEntity<Credit>(HttpStatus.NOT_FOUND)));
     }
 
     @GetMapping(value = "/credit/search/{customerId}")
@@ -123,5 +125,10 @@ public class CreditController {
     public Mono<Credit> getExpiredDebtStatus(@PathVariable(name = "customerId") String customerId,
             @PathVariable(name = "statusId") Integer statusId) {
         return creditService.findByExpiredDebt(customerId, statusId);
+    }
+
+    @GetMapping(value = "/credit/search/betweenDates/{bankId}")
+    public Flux<CreditDTO> getCreditBetweenDates(@PathVariable(name = "bankId") String bankId, @RequestBody initialEndDates dates) {
+        return creditService.findBetweenDates(dates.getInitialDate(), dates.getEndDate(), bankId);
     }
 }
