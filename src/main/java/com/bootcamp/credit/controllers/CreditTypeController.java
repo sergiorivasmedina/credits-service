@@ -33,8 +33,9 @@ public class CreditTypeController {
     }
 
     @GetMapping(value = "/credit/types/{id}")
-    public @ResponseBody Mono<CreditType> getOneType(@PathVariable(value = "id") String creditTypeId) {
-        return creditTypeService.findById(creditTypeId);
+    public @ResponseBody Mono<String> getOneType(@PathVariable(value = "id") String creditTypeId) {
+        return creditTypeService.findById(creditTypeId)
+            .map(CreditType::getName);
     }
 
     @PostMapping(value = "/credit/type/new")
