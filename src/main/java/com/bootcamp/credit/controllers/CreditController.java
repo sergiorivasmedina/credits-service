@@ -127,7 +127,7 @@ public class CreditController {
         return creditService.findByExpiredDebt(customerId, statusId);
     }
 
-    @GetMapping(value = "/credit/search/betweenDates/{bankId}")
+    @PostMapping(value = "/credit/search/betweenDates/{bankId}")
     public Flux<CreditDTO> getCreditBetweenDates(@PathVariable(name = "bankId") String bankId, @RequestBody initialEndDates dates) {
         return creditService.findBetweenDates(dates.getInitialDate(), dates.getEndDate(), bankId);
     }
