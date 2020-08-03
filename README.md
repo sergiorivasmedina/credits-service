@@ -1,4 +1,4 @@
-# project2-credit
+# project4 updated - credit
 
 ### Command for run Dockerfile and start container
 cd /credits
@@ -6,6 +6,11 @@ cd /credits
 docker build -t "credits"
 
 docker run --restart always --name credtis -8080:9000 -d credtis:latest
+
+### Docker Compose
+cd /credits
+
+docker-compose up -d
 
 ### Sonarqube
 

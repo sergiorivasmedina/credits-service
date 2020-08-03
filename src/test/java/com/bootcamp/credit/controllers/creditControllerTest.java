@@ -55,23 +55,6 @@ public class creditControllerTest {
     }
 
     @Test
-    public void newCredit() {
-        Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, 0, null,"BCP",null);
-
-        Mockito
-            .when(service.save(credit))
-            .thenReturn(Mono.just(credit));
-        
-        webclient.post()
-            .uri("/credit/new")
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(BodyInserters.fromValue(credit))
-            .exchange()
-            .expectStatus().isOk()
-            .expectBody(Credit.class);
-    }
-
-    @Test
     public void deleteCredit() {
         Credit credit = new Credit("1","1","soles",100.0,0.0,"tarjeta de credito", 100.0, 0, null,"BCP",null);
 
